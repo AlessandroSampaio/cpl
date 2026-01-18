@@ -4,7 +4,7 @@ use crate::schema::tanks::dsl::*;
 use crate::tanks::model::{NewTank, Tank};
 use diesel::{RunQueryDsl, SelectableHelper};
 
-#[taurpc::procedures(path = "tanks")]
+#[taurpc::procedures(path = "tanks", export_to = "../src/types/rpc.ts")]
 pub trait TankService {
     async fn create_tank(new_tank: NewTank) -> Result<Tank, IpcError>;
 }
