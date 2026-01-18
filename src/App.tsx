@@ -1,50 +1,58 @@
-import { createSignal } from "solid-js";
-import logo from "./assets/logo.svg";
-import { invoke } from "@tauri-apps/api/core";
+import {
+  ColorModeProvider,
+  ColorModeScript,
+  createLocalStorageManager,
+} from "@kobalte/core";
 import "./App.css";
+import { Button } from "./components/ui/button";
 
 function App() {
-  const [greetMsg, setGreetMsg] = createSignal("");
-  const [name, setName] = createSignal("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name: name() }));
-  }
+  const storageManager = createLocalStorageManager("vite-ui-theme");
 
   return (
-    <main class="container">
-      <h1>Welcome to Tauri + Solid</h1>
+    <>
+      <ColorModeScript storageType={storageManager.type} />
+      <ColorModeProvider storageManager={storageManager}>
+        <main class="h-dvh flex flex-col gap-4">
+          <h1 class="text-2xl text-center">Controle de Produção</h1>
+          <div class="flex flex-col items-center justify-center gap-8 px-8">
+            <div class="flex gap-8">
+              <Button
+                variant="outline"
+                class="h-52 w-44 cursor-pointer flex flex-col p-4"
+              >
+                <div class="flex-1"></div>
+                <span class="text-lg">Produtores</span>
+              </Button>
 
-      <div class="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={logo} class="logo solid" alt="Solid logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and Solid logos to learn more.</p>
-
-      <form
-        class="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg()}</p>
-    </main>
+              <Button
+                variant="outline"
+                class="h-52 w-44 cursor-pointer flex flex-col p-4"
+              >
+                <div class="flex-1"></div>
+                <span class="text-lg">Coletores</span>
+              </Button>
+            </div>
+            <div class="flex gap-8">
+              <Button
+                variant="outline"
+                class="h-52 w-44 cursor-pointer flex flex-col p-4"
+              >
+                <div class="flex-1"></div>
+                <span class="text-lg">Registrar Coleta</span>
+              </Button>
+              <Button
+                variant="outline"
+                class="h-52 w-44 cursor-pointer flex flex-col p-4"
+              >
+                <div class="flex-1"></div>
+                <span class="text-lg">Registrar Retirada</span>
+              </Button>
+            </div>
+          </div>
+        </main>
+      </ColorModeProvider>
+    </>
   );
 }
 

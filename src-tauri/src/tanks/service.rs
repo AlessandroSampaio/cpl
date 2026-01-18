@@ -34,13 +34,13 @@ impl TankService for TankServiceImpl {
     async fn list_tanks(self) -> Result<Vec<Tank>, IpcError> {
         unimplemented!();
     }
-    async fn delete_tank(self, tank_id: i32) -> Result<(), IpcError> {
+    async fn delete_tank(self, _tank_id: i32) -> Result<(), IpcError> {
         unimplemented!();
     }
-    async fn get_tank(self, tank_id: i32) -> Result<Tank, IpcError> {
+    async fn get_tank(self, _tank_id: i32) -> Result<Tank, IpcError> {
         unimplemented!();
     }
-    async fn update_tank(self, tank_id: i32, updated_tank: NewTank) -> Result<Tank, IpcError> {
+    async fn update_tank(self, _tank_id: i32, _updated_tank: NewTank) -> Result<Tank, IpcError> {
         unimplemented!();
     }
 }

@@ -10,8 +10,12 @@ export type NewTank = { name: string; capacity: string | null }
 
 export type Tank = { id: number; name: string; capacity: string }
 
-const ARGS_MAP = { 'tanks':'{"create_tank":["new_tank"]}' }
-export type Router = { "tanks": {create_tank: (newTank: NewTank) => Promise<Tank>} };
+const ARGS_MAP = { 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
+export type Router = { "tanks": {create_tank: (newTank: NewTank) => Promise<Tank>, 
+delete_tank: (tankId: number) => Promise<null>, 
+get_tank: (tankId: number) => Promise<Tank>, 
+list_tanks: () => Promise<Tank[]>, 
+update_tank: (tankId: number, updatedTank: NewTank) => Promise<Tank>} };
 
 
 export const createTauRPCProxy = () => createProxy<Router>(ARGS_MAP)
