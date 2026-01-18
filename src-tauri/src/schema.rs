@@ -6,7 +6,7 @@ diesel::table! {
         producer_id -> Int4,
         collector_id -> Nullable<Int4>,
         tank_id -> Int4,
-        quantity -> Int4,
+        quantity -> Numeric,
         date -> Date,
         time -> Timestamp,
     }
@@ -32,7 +32,7 @@ diesel::table! {
     tanks (id) {
         id -> Int4,
         name -> Text,
-        capacity -> Int4,
+        capacity -> Numeric,
     }
 }
 
@@ -40,7 +40,7 @@ diesel::table! {
     withdrawals (id) {
         id -> Int4,
         tank_id -> Int4,
-        quantity -> Int4,
+        quantity -> Numeric,
         date -> Date,
         time -> Timestamp,
     }
