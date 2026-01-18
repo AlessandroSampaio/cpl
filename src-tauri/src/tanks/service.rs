@@ -7,6 +7,10 @@ use diesel::{RunQueryDsl, SelectableHelper};
 #[taurpc::procedures(path = "tanks", export_to = "../src/types/rpc.ts")]
 pub trait TankService {
     async fn create_tank(new_tank: NewTank) -> Result<Tank, IpcError>;
+    async fn list_tanks() -> Result<Vec<Tank>, IpcError>;
+    async fn delete_tank(tank_id: i32) -> Result<(), IpcError>;
+    async fn get_tank(tank_id: i32) -> Result<Tank, IpcError>;
+    async fn update_tank(tank_id: i32, updated_tank: NewTank) -> Result<Tank, IpcError>;
 }
 
 #[derive(Clone)]
@@ -25,5 +29,18 @@ impl TankService for TankServiceImpl {
             .get_result(connection)?;
 
         Ok(created_tank)
+    }
+
+    async fn list_tanks(self) -> Result<Vec<Tank>, IpcError> {
+        unimplemented!();
+    }
+    async fn delete_tank(self, tank_id: i32) -> Result<(), IpcError> {
+        unimplemented!();
+    }
+    async fn get_tank(self, tank_id: i32) -> Result<Tank, IpcError> {
+        unimplemented!();
+    }
+    async fn update_tank(self, tank_id: i32, updated_tank: NewTank) -> Result<Tank, IpcError> {
+        unimplemented!();
     }
 }
