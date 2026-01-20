@@ -1,6 +1,8 @@
+use crate::db::establish_connection;
 use crate::errors::IpcError;
 use crate::producers::model::{NewProducer, Producer};
-// use crate::schema::producers::dsl::*;
+use crate::schema::producers::dsl::*;
+use diesel::{RunQueryDsl, SelectableHelper};
 
 #[taurpc::procedures(path = "producers")]
 pub trait ProducerService {
@@ -17,8 +19,17 @@ pub struct ProducerServiceImpl;
 
 #[taurpc::resolvers]
 impl ProducerService for ProducerServiceImpl {
-    async fn create_producer(self, _producer: NewProducer) -> Result<Producer, IpcError> {
-        unimplemented!();
+    async fn create_producer(self, producer: NewProducer) -> Result<Producer, IpcError> {
+        println!("Creating producer, {:?}", producer);
+
+        let connection = &mut establish_connection();
+
+        let created_producer = diesel::insert_into(producers)
+            .values(&producer)
+            .returning(Producer::as_returning())
+            .get_result(connection)?;
+
+        return Ok(created_producer);
     }
 
     async fn list_producers(self) -> Result<Vec<Producer>, IpcError> {
