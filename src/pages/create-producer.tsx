@@ -1,11 +1,23 @@
 import { ColumnDef } from "@tanstack/solid-table";
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import { CreateProducerDialog } from "~/components/producer/create-producer-dialog";
 import { DataTable } from "~/components/ui/data-table";
 import { Separator } from "~/components/ui/separator";
 import { TextField, TextFieldInput } from "~/components/ui/text-field";
 import { showToast } from "~/components/ui/toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { createTauRPCProxy, Producer } from "~/types/rpc";
+import { Button } from "~/components/ui/button";
+import { IconDotsHorizontal } from "~/components/icons/icon-dot-horizontal";
+import { IconSun } from "~/components/icons/icon-sun";
+import { IconMoon } from "~/components/icons/icon-moon";
 
 export const CreateProducer = () => {
   const rpc = createTauRPCProxy();
@@ -19,6 +31,51 @@ export const CreateProducer = () => {
     {
       accessorKey: "name",
       header: "Nome",
+    },
+    {
+      id: "shifts",
+      header: "Turnos",
+      cell: (props) => (
+        <div class="flex gap-2">
+          <Show when={props.row.original.day_shift}>
+            <IconSun class="text-yellow-300" />
+          </Show>
+          <Show when={props.row.original.night_shift}>
+            <IconMoon class="text-shadow-white" />
+          </Show>
+        </div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: (props) => {
+        return (
+          <DropdownMenu placement="bottom-end">
+            <DropdownMenuTrigger
+              as={Button<"button">}
+              variant="ghost"
+              class="size-8 p-0"
+            >
+              <span class="sr-only">Open menu</span>
+              <IconDotsHorizontal />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(`user_${props.row.original.id}`)
+                }
+              >
+                Copy payment ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View customer</DropdownMenuItem>
+              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
   ];
 
