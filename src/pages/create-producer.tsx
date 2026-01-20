@@ -61,17 +61,16 @@ export const CreateProducer = () => {
               <IconDotsHorizontal />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>Ações</DropdownMenuLabel>
+              <DropdownMenuItem>Editar</DropdownMenuItem>
               <DropdownMenuItem
+                class="data-highlighted:bg-destructive data-highlighted:text-destructive-foreground text-destructive"
                 onClick={() =>
-                  navigator.clipboard.writeText(`user_${props.row.original.id}`)
+                  rpc.producers.delete_producer(props.row.original.id)
                 }
               >
-                Copy payment ID
+                Apagar
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
