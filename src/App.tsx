@@ -1,21 +1,13 @@
-import {
-  ColorModeProvider,
-  ColorModeScript,
-  createLocalStorageManager,
-} from "@kobalte/core";
+import { Route, Router } from "@solidjs/router";
 import "./App.css";
+import { Layout } from "./components/layout";
 import { Home } from "./pages/home";
 
 function App() {
-  const storageManager = createLocalStorageManager("vite-ui-theme");
-
   return (
-    <>
-      <ColorModeScript storageType={storageManager.type} />
-      <ColorModeProvider storageManager={storageManager}>
-        <Home />
-      </ColorModeProvider>
-    </>
+    <Router root={(props) => <Layout>{props.children}</Layout>}>
+      <Route path={"/"} component={Home} />
+    </Router>
   );
 }
 
