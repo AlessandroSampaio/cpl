@@ -2,6 +2,7 @@ use crate::db::establish_connection;
 use crate::errors::IpcError;
 use crate::producers::model::{NewProducer, Producer};
 use crate::schema::producers::dsl::*;
+use diesel::prelude::*;
 use diesel::{RunQueryDsl, SelectableHelper};
 
 #[taurpc::procedures(path = "producers")]
@@ -33,7 +34,11 @@ impl ProducerService for ProducerServiceImpl {
     }
 
     async fn list_producers(self) -> Result<Vec<Producer>, IpcError> {
-        unimplemented!();
+        let connection = &mut establish_connection();
+
+        let list_producers = producers.select(Producer::as_select()).load(connection)?;
+
+        Ok(list_producers)
     }
 
     async fn delete_producer(self, _producer_id: i32) -> Result<(), IpcError> {
