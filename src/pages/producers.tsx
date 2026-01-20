@@ -105,7 +105,7 @@ export const Producers = () => {
   return (
     <div class="space-y-8 h-[90%] flex flex-col">
       <div class="pl-8 mb-4">
-        <h1 class="text-3xl">Create Producer</h1>
+        <h1 class="text-3xl">Produtore</h1>
       </div>
       <Separator />
       <div class="flex-1 flex flex-col gap-8">
