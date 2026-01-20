@@ -1,3 +1,4 @@
+pub mod collectors;
 pub mod db;
 pub mod errors;
 pub mod producers;
@@ -6,6 +7,7 @@ pub mod tanks;
 
 use taurpc::Router;
 
+use crate::collectors::{CollectorService, CollectorServiceImpl};
 use crate::producers::{ProducerService, ProducerServiceImpl};
 use crate::tanks::{TankService, TankServiceImpl};
 
@@ -19,7 +21,8 @@ fn greet(name: &str) -> String {
 pub fn run() {
     let ipc_handler = Router::new()
         .merge(TankServiceImpl.into_handler())
-        .merge(ProducerServiceImpl.into_handler());
+        .merge(ProducerServiceImpl.into_handler())
+        .merge(CollectorServiceImpl.into_handler());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())

@@ -4,7 +4,11 @@ import { createTauRPCProxy as createProxy, type InferCommandOutput } from 'taurp
 type TAURI_CHANNEL<T> = (response: T) => void
 
 
+export type Collector = { id: number; name: string }
+
 export type IpcError = { type: "DatabaseError" } | { type: "InvalidValue"; data: [string, string] }
+
+export type NewCollector = { name: string }
 
 export type NewProducer = { name: string; day_shift: boolean; night_shift: boolean }
 
@@ -14,8 +18,13 @@ export type Producer = { id: number; name: string; day_shift: boolean; night_shi
 
 export type Tank = { id: number; name: string; capacity: string }
 
-const ARGS_MAP = { 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
-export type Router = { "producers": {create_producer: (producer: NewProducer) => Promise<Producer>, 
+const ARGS_MAP = { 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
+export type Router = { "collectors": {create_collector: (collector: NewCollector) => Promise<Collector>, 
+delete_collector: (collectorId: number) => Promise<null>, 
+get_collector: (collectorId: number) => Promise<Collector>, 
+list_collectors: () => Promise<Collector[]>, 
+update_collector: (collectorId: number, collector: NewCollector) => Promise<Collector>},
+"producers": {create_producer: (producer: NewProducer) => Promise<Producer>, 
 delete_producer: (producerId: number) => Promise<null>, 
 get_producer: (producerId: number) => Promise<Producer>, 
 list_producers: () => Promise<Producer[]>, 
