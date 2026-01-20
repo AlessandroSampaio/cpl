@@ -1,26 +1,26 @@
 import { ColumnDef } from "@tanstack/solid-table";
 import { createSignal, onMount, Show } from "solid-js";
+import { IconDotsHorizontal } from "~/components/icons/icon-dot-horizontal";
+import { IconMoon } from "~/components/icons/icon-moon";
+import { IconSun } from "~/components/icons/icon-sun";
 import { CreateProducerDialog } from "~/components/producer/create-producer-dialog";
+import { Button } from "~/components/ui/button";
 import { DataTable } from "~/components/ui/data-table";
-import { Separator } from "~/components/ui/separator";
-import { TextField, TextFieldInput } from "~/components/ui/text-field";
-import { showToast } from "~/components/ui/toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Separator } from "~/components/ui/separator";
+import { TextField, TextFieldInput } from "~/components/ui/text-field";
+import { showToast } from "~/components/ui/toast";
 import { createTauRPCProxy, Producer } from "~/types/rpc";
-import { Button } from "~/components/ui/button";
-import { IconDotsHorizontal } from "~/components/icons/icon-dot-horizontal";
-import { IconSun } from "~/components/icons/icon-sun";
-import { IconMoon } from "~/components/icons/icon-moon";
 
 export const CreateProducer = () => {
   const rpc = createTauRPCProxy();
+  // const [filter, setFilter] = createSignal<string>("");
   const [producers, setProducers] = createSignal<Producer[]>([]);
   const [openCreate, setOpenCreate] = createSignal(false);
   const columns: ColumnDef<Producer>[] = [
@@ -66,7 +66,16 @@ export const CreateProducer = () => {
               <DropdownMenuItem
                 class="data-highlighted:bg-destructive data-highlighted:text-destructive-foreground text-destructive"
                 onClick={() =>
-                  rpc.producers.delete_producer(props.row.original.id)
+                  rpc.producers
+                    .delete_producer(props.row.original.id)
+                    .then(() => {
+                      showToast({
+                        title: "Produtor removido com sucesso",
+                        description: "O produtor foi removido com sucesso",
+                        variant: "destructive",
+                      });
+                    })
+                    .then(list_producers)
                 }
               >
                 Apagar

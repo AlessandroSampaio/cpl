@@ -41,8 +41,11 @@ impl ProducerService for ProducerServiceImpl {
         Ok(list_producers)
     }
 
-    async fn delete_producer(self, _producer_id: i32) -> Result<(), IpcError> {
-        unimplemented!();
+    async fn delete_producer(self, producer_id: i32) -> Result<(), IpcError> {
+        let connection = &mut establish_connection();
+
+        diesel::delete(producers.filter(id.eq(producer_id))).execute(connection)?;
+        Ok(())
     }
 
     async fn get_producer(self, _producer_id: i32) -> Result<Producer, IpcError> {
