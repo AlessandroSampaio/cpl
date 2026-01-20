@@ -7,6 +7,7 @@ import { children, ParentComponent } from "solid-js";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
 import { LayoutContent } from "./layout-content";
+import { Toaster } from "./ui/toast";
 
 export const Layout: ParentComponent = (props) => {
   const storageManager = createLocalStorageManager("vite-ui-theme");
@@ -21,7 +22,7 @@ export const Layout: ParentComponent = (props) => {
           <LayoutContent>
             <SidebarTrigger class="absolute z-10 top-5 left-4" />
             {resolved()}
-            {/*<Toaster />*/}
+            <Toaster />
           </LayoutContent>
         </SidebarProvider>
       </ColorModeProvider>
