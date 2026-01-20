@@ -1,10 +1,12 @@
 pub mod db;
 pub mod errors;
+pub mod producers;
 pub mod schema;
 pub mod tanks;
 
 use taurpc::Router;
 
+use crate::producers::{ProducerService, ProducerServiceImpl};
 use crate::tanks::{TankService, TankServiceImpl};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -15,7 +17,9 @@ fn greet(name: &str) -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let ipc_handler = Router::new().merge(TankServiceImpl.into_handler());
+    let ipc_handler = Router::new()
+        .merge(TankServiceImpl.into_handler())
+        .merge(ProducerServiceImpl.into_handler());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
