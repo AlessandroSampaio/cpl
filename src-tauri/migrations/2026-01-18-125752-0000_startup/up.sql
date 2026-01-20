@@ -2,20 +2,20 @@
 --
 
 CREATE TABLE "tanks"(
-	"id" INT4 NOT NULL PRIMARY KEY,
+	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" TEXT NOT NULL,
 	"capacity" NUMERIC(10,3) NOT NULL
 );
 
 CREATE TABLE "producers"(
-	"id" INT4 NOT NULL PRIMARY KEY,
+	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" TEXT NOT NULL,
 	"day_shift" BOOL NOT NULL,
 	"night_shift" BOOL NOT NULL
 );
 
 CREATE TABLE "withdrawals"(
-	"id" INT4 NOT NULL PRIMARY KEY,
+	"id" SERIAL NOT NULL PRIMARY KEY,
 	"tank_id" INT4 NOT NULL,
 	"quantity" NUMERIC(10,3) NOT NULL,
 	"date" DATE NOT NULL,
@@ -24,12 +24,12 @@ CREATE TABLE "withdrawals"(
 );
 
 CREATE TABLE "collectors"(
-	"id" INT4 NOT NULL PRIMARY KEY,
+	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" TEXT NOT NULL
 );
 
 CREATE TABLE "collections"(
-	"id" INT4 NOT NULL PRIMARY KEY,
+	"id" SERIAL NOT NULL PRIMARY KEY,
 	"producer_id" INT4 NOT NULL,
 	"collector_id" INT4,
 	"tank_id" INT4 NOT NULL,
