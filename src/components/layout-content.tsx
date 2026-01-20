@@ -6,7 +6,7 @@ export const LayoutContent: ParentComponent = (props) => {
 
   return (
     <SidebarInset>
-      <div class="p-4">{resolved()}</div>
+      <div class="p-4 h-full">{resolved()}</div>
     </SidebarInset>
   );
 };
