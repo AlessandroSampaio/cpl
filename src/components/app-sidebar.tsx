@@ -19,7 +19,7 @@ const items = [
   },
   {
     title: "Produtores",
-    url: "/producers",
+    url: "/producers/new",
     icon: undefined,
   },
   {
