@@ -48,15 +48,27 @@ impl ProducerService for ProducerServiceImpl {
         Ok(())
     }
 
-    async fn get_producer(self, _producer_id: i32) -> Result<Producer, IpcError> {
-        unimplemented!();
+    async fn get_producer(self, producer_id: i32) -> Result<Producer, IpcError> {
+        let connection = &mut establish_connection();
+
+        let producer = producers
+            .filter(id.eq(producer_id))
+            .select(Producer::as_select())
+            .first(connection)?;
+        Ok(producer)
     }
 
     async fn update_producer(
         self,
-        _producer_id: i32,
-        _producer: NewProducer,
+        producer_id: i32,
+        producer: NewProducer,
     ) -> Result<Producer, IpcError> {
-        unimplemented!();
+        let connection = &mut establish_connection();
+
+        let updated_producer = diesel::update(producers.filter(id.eq(producer_id)))
+            .set(&producer)
+            .returning(Producer::as_returning())
+            .get_result(connection)?;
+        Ok(updated_producer)
     }
 }

@@ -13,7 +13,7 @@ pub struct Producer {
 }
 
 #[taurpc::ipc_type]
-#[derive(Insertable, Debug)]
+#[derive(Insertable, Debug, AsChangeset)]
 #[diesel(table_name = producers)]
 pub struct NewProducer {
     pub name: String,

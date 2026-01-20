@@ -18,7 +18,7 @@ import { TextField, TextFieldInput } from "~/components/ui/text-field";
 import { showToast } from "~/components/ui/toast";
 import { createTauRPCProxy, Producer } from "~/types/rpc";
 
-export const CreateProducer = () => {
+export const Producers = () => {
   const rpc = createTauRPCProxy();
   // const [filter, setFilter] = createSignal<string>("");
   const [producers, setProducers] = createSignal<Producer[]>([]);
