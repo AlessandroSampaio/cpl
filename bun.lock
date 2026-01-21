@@ -8,6 +8,7 @@
         "@ark-ui/solid": "^5.30.0",
         "@kobalte/core": "^0.13.11",
         "@modular-forms/solid": "^0.25.1",
+        "@solid-primitives/input-mask": "^0.3.1",
         "@solidjs/router": "^0.15.4",
         "@tailwindcss/vite": "^4.1.18",
         "@tanstack/solid-table": "^8.21.3",
@@ -201,6 +202,8 @@
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.55.1", "", { "os": "win32", "cpu": "x64" }, "sha512-SPEpaL6DX4rmcXtnhdrQYgzQ5W2uW3SCJch88lB2zImhJRhIIK44fkUrgIV/Q8yUNfw5oyZ5vkeQsZLhCb06lw=="],
 
     "@solid-primitives/event-listener": ["@solid-primitives/event-listener@2.4.3", "", { "dependencies": { "@solid-primitives/utils": "^6.3.2" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-h4VqkYFv6Gf+L7SQj+Y6puigL/5DIi7x5q07VZET7AWcS+9/G3WfIE9WheniHWJs51OEkRB43w6lDys5YeFceg=="],
+
+    "@solid-primitives/input-mask": ["@solid-primitives/input-mask@0.3.1", "", { "peerDependencies": { "solid-js": "^1.6.12" }, "optionalPeers": ["solid-js"] }, "sha512-JHsBdY1hP5MqCf71RL5NiZYxADJwUNvF7WLYnt1ZzaJiyOad4wrCnMadK1+o2zYqR4j7lp6Nq/PQw4eVMTzlvQ=="],
 
     "@solid-primitives/keyed": ["@solid-primitives/keyed@1.5.2", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-BgoEdqPw48URnI+L5sZIHdF4ua4Las1eWEBBPaoSFs42kkhnHue+rwCBPL2Z9ebOyQ75sUhUfOETdJfmv0D6Kg=="],
 
