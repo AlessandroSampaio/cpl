@@ -44,9 +44,11 @@ export const ModularDatePicker = (props: ModularDatePickerProps) => {
     "onBlur",
   ]);
   return (
-    <>
+    <div class="flex flex-col space-y-2">
       <Show when={props.label}>
-        <Label>{props.label}</Label>
+        <Label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          {props.label}
+        </Label>
       </Show>
       <DatePicker
         {...rootProps}
@@ -186,6 +188,6 @@ export const ModularDatePicker = (props: ModularDatePickerProps) => {
           </DatePickerPositioner>
         </Portal>
       </DatePicker>
-    </>
+    </div>
   );
 };
