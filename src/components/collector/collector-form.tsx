@@ -1,11 +1,5 @@
-import {
-  createForm,
-  setValue,
-  SubmitHandler,
-  toUpperCase,
-} from "@modular-forms/solid";
+import { createForm, SubmitHandler, toUpperCase } from "@modular-forms/solid";
 import { Button } from "~/components/ui/button";
-import { ModularCheckbox } from "~/components/ui/modular-checkbox";
 import { ModularTextField } from "~/components/ui/modular-text-field";
 import { Collector, NewCollector } from "~/types/rpc";
 

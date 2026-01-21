@@ -8,7 +8,10 @@ export const Collections = () => {
         <h1 class="text-3xl">Coletas</h1>
       </div>
       <Separator />
-      <CollectionForm />
+      <CollectionForm
+        handleCancel={() => console.log(`cancelled`)}
+        handleSubmit={console.log}
+      />
     </div>
   );
 };

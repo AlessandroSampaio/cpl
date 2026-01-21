@@ -4,9 +4,13 @@ import { createTauRPCProxy as createProxy, type InferCommandOutput } from 'taurp
 type TAURI_CHANNEL<T> = (response: T) => void
 
 
+export type Collection = { id: number; producer_id: number; collector_id: number | null; tank_id: number; quantity: string; date: string; time: string }
+
 export type Collector = { id: number; name: string }
 
 export type IpcError = { type: "DatabaseError" } | { type: "InvalidValue"; data: [string, string] }
+
+export type NewCollection = { producer_id: number; collector_id: number | null; tank_id: number; quantity: string; date: string; time: string }
 
 export type NewCollector = { name: string }
 
@@ -18,8 +22,13 @@ export type Producer = { id: number; name: string; day_shift: boolean; night_shi
 
 export type Tank = { id: number; name: string; capacity: string }
 
-const ARGS_MAP = { 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
-export type Router = { "collectors": {create_collector: (collector: NewCollector) => Promise<Collector>, 
+const ARGS_MAP = { 'collections':'{"create_collection":["new_collection"],"delete_collection":["collection_id"],"get_collection":["collection_id"],"list_collections":[],"update_collection":["collection_id","collection"]}', 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
+export type Router = { "collections": {create_collection: (newCollection: NewCollection) => Promise<Collection>, 
+delete_collection: (collectionId: number) => Promise<null>, 
+get_collection: (collectionId: number) => Promise<Collection>, 
+list_collections: () => Promise<Collection[]>, 
+update_collection: (collectionId: number, collection: NewCollection) => Promise<Collection>},
+"collectors": {create_collector: (collector: NewCollector) => Promise<Collector>, 
 delete_collector: (collectorId: number) => Promise<null>, 
 get_collector: (collectorId: number) => Promise<Collector>, 
 list_collectors: () => Promise<Collector[]>, 
