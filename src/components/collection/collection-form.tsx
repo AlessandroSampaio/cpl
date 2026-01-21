@@ -1,11 +1,7 @@
 import { DateValue, parseDate } from "@ark-ui/solid";
-import {
-  createForm,
-  setValue,
-  SubmitHandler,
-  toUpperCase,
-} from "@modular-forms/solid";
+import { createForm, setValue, SubmitHandler } from "@modular-forms/solid";
 import { createEffect, createSignal, onMount } from "solid-js";
+import { toDate, toNumber } from "~/lib/transforms";
 import { normalizeDate } from "~/lib/utils";
 import {
   Collection,
@@ -16,8 +12,8 @@ import {
 } from "~/types/rpc";
 import { Button } from "../ui/button";
 import { ModularDatePicker } from "../ui/modular-date-picker";
-import { Select } from "../ui/select";
 import { ModularTextField } from "../ui/modular-text-field";
+import { Select } from "../ui/select";
 
 type CollectionFormProps = {
   handleSubmit: SubmitHandler<NewCollection>;
@@ -101,15 +97,12 @@ export const CollectionForm = (props: CollectionFormProps) => {
             );
           }}
         </Field>
-        <Field
-          name="date"
-          type="string"
-          transform={toUpperCase({ on: "input" })}
-        >
+        <Field name="date" type="string" transform={toDate({ on: "input" })}>
           {(_, props) => (
             <ModularDatePicker
               {...props}
               label="Data da coleta"
+              placeholder="dd/MM/yyy"
               value={date() ? [date()!] : undefined}
               onValueChange={(value) => {
                 setDate(value.value[0]);
@@ -135,7 +128,11 @@ export const CollectionForm = (props: CollectionFormProps) => {
             />
           )}
         </Field>
-        <Field name="quantity" type="string">
+        <Field
+          name="quantity"
+          type="string"
+          transform={toNumber({ on: "input" })}
+        >
           {(field, props) => (
             <ModularTextField
               {...props}

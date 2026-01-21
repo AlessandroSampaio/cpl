@@ -32,6 +32,7 @@ type ModularDatePickerProps = {
   value: DateValue[] | undefined;
   onValueChange: (value: ValueChangeDetails) => void;
   label?: string | undefined;
+  placeholder?: string | undefined;
   onInput: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, InputEvent>;
   onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, Event>;
   onBlur: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, FocusEvent>;
@@ -42,6 +43,7 @@ export const ModularDatePicker = (props: ModularDatePickerProps) => {
     "onInput",
     "onChange",
     "onBlur",
+    "placeholder",
   ]);
   return (
     <div class="flex flex-col space-y-2">
