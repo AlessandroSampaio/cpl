@@ -35,7 +35,6 @@ CREATE TABLE "collections"(
 	"tank_id" INT4 NOT NULL,
 	"quantity" NUMERIC(10,3) NOT NULL,
 	"date" DATE NOT NULL,
-	"time" TIMESTAMP NOT NULL,
 	FOREIGN KEY ("producer_id") REFERENCES "producers"("id"),
 	FOREIGN KEY ("collector_id") REFERENCES "collectors"("id"),
 	FOREIGN KEY ("tank_id") REFERENCES "tanks"("id")

@@ -1,4 +1,4 @@
-use crate::schema::collections;
+use crate::{errors::IpcError, schema::collections};
 use bigdecimal::BigDecimal;
 use diesel::prelude::*;
 
@@ -13,7 +13,6 @@ pub struct Collection {
     pub tank_id: i32,
     pub quantity: BigDecimal,
     pub date: chrono::NaiveDate,
-    pub time: chrono::NaiveDateTime,
 }
 
 #[taurpc::ipc_type]
@@ -25,5 +24,12 @@ pub struct NewCollection {
     pub tank_id: i32,
     pub quantity: BigDecimal,
     pub date: chrono::NaiveDate,
-    pub time: chrono::NaiveDateTime,
+}
+
+impl NewCollection {
+    pub fn validate(&mut self) -> Result<(), IpcError> {
+        println!("Validating collection : {:?}", self);
+
+        Ok(())
+    }
 }

@@ -4,13 +4,13 @@ import { createTauRPCProxy as createProxy, type InferCommandOutput } from 'taurp
 type TAURI_CHANNEL<T> = (response: T) => void
 
 
-export type Collection = { id: number; producer_id: number; collector_id: number | null; tank_id: number; quantity: string; date: string; time: string }
+export type Collection = { id: number; producer_id: number; collector_id: number | null; tank_id: number; quantity: string; date: string }
 
 export type Collector = { id: number; name: string }
 
 export type IpcError = { type: "DatabaseError" } | { type: "InvalidValue"; data: [string, string] }
 
-export type NewCollection = { producer_id: number; collector_id: number | null; tank_id: number; quantity: string; date: string; time: string }
+export type NewCollection = { producer_id: number; collector_id: number | null; tank_id: number; quantity: string; date: string }
 
 export type NewCollector = { name: string }
 
