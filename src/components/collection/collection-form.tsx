@@ -27,7 +27,6 @@ export const CollectionForm = (props: CollectionFormProps) => {
   const [_collectionForm, { Form, Field }] = createForm<NewCollection>({
     initialValues: {
       date: parseDate(new Date()).toString(),
-      time: "",
       tank_id: 1,
       ...props.defaultValue,
     },
