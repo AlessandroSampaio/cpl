@@ -37,7 +37,6 @@ impl DashboardService for DashboardServiceImpl {
         start_date: NaiveDate,
         end_date: NaiveDate,
     ) -> Result<Vec<CollectionByProducer>, IpcError> {
-        // Implementation goes here
         println!("Searching producer data...");
         let connection = &mut establish_connection();
 
@@ -57,7 +56,6 @@ impl DashboardService for DashboardServiceImpl {
         start_date: NaiveDate,
         end_date: NaiveDate,
     ) -> Result<Vec<CollectionByCollector>, IpcError> {
-        // Implementation goes here
         println!("Searching producer data...");
         let connection = &mut establish_connection();
 
@@ -77,7 +75,6 @@ impl DashboardService for DashboardServiceImpl {
         start_date: NaiveDate,
         end_date: NaiveDate,
     ) -> Result<Vec<TankMovByDateRange>, IpcError> {
-        // Implementation goes here
         println!(
             "Searching collection data... for the range of {} to {}",
             start_date, end_date
