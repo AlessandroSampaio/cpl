@@ -24,11 +24,15 @@ export type NewProducer = { name: string; day_shift: boolean; night_shift: boole
 
 export type NewTank = { name: string; capacity: string | null }
 
+export type NewWithdrawal = { tank_id: number; quantity: string; date: string }
+
 export type Producer = { id: number; name: string; day_shift: boolean; night_shift: boolean }
 
 export type Tank = { id: number; name: string; capacity: string }
 
-const ARGS_MAP = { 'collections':'{"create_collection":["new_collection"],"delete_collection":["collection_id"],"get_collection":["collection_id"],"list_collections":[],"update_collection":["collection_id","collection"]}', 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'dashboard':'{"get_collection_by_date_range":["start_date","end_date"],"get_collector_data":[],"get_producer_data":[]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
+export type Withdrawal = { id: number; tank_id: number; quantity: string; date: string }
+
+const ARGS_MAP = { 'collections':'{"create_collection":["new_collection"],"delete_collection":["collection_id"],"get_collection":["collection_id"],"list_collections":[],"update_collection":["collection_id","collection"]}', 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'dashboard':'{"get_collection_by_date_range":["start_date","end_date"],"get_collector_data":[],"get_producer_data":[]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}', 'withdrawals':'{"create_withdrawal":["new_withdrawal"]}' }
 export type Router = { "collections": {create_collection: (newCollection: NewCollection) => Promise<Collection>, 
 delete_collection: (collectionId: number) => Promise<null>, 
 get_collection: (collectionId: number) => Promise<Collection>, 
@@ -51,7 +55,8 @@ update_producer: (producerId: number, producer: NewProducer) => Promise<Producer
 delete_tank: (tankId: number) => Promise<null>, 
 get_tank: (tankId: number) => Promise<Tank>, 
 list_tanks: () => Promise<Tank[]>, 
-update_tank: (tankId: number, updatedTank: NewTank) => Promise<Tank>} };
+update_tank: (tankId: number, updatedTank: NewTank) => Promise<Tank>},
+"withdrawals": {create_withdrawal: (newWithdrawal: NewWithdrawal) => Promise<Withdrawal>} };
 
 
 export const createTauRPCProxy = () => createProxy<Router>(ARGS_MAP)
