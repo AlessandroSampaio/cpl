@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { BarChart } from "~/components/ui/charts";
 
-type ProducerChartProps = {
+type CollectorChartProps = {
   data: {
     labels: string[];
     datasets: {
@@ -11,14 +11,14 @@ type ProducerChartProps = {
   };
 };
 
-export const ProducerChart = (props: ProducerChartProps) => {
+export const CollectorChart = (props: CollectorChartProps) => {
   return (
     <Card class="w-125">
       <CardHeader>
-        <CardTitle>Volume por Produtor</CardTitle>
+        <CardTitle>Volume por Coletor</CardTitle>
       </CardHeader>
       <CardContent class="h-64 w-125 ">
-        <BarChart data={props.data} width={500} />
+        <BarChart data={props.data} />
       </CardContent>
     </Card>
   );

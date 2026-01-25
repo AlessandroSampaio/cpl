@@ -1,8 +1,8 @@
-use crate::dashboard::model::CollectionByProducer;
+use crate::dashboard::model::{CollectionByCollector, CollectionByProducer};
 use crate::{
     db::establish_connection,
     errors::IpcError,
-    schema::{collections, producers},
+    schema::{collections, collectors, producers},
 };
 use diesel::dsl::sum;
 use diesel::{QueryDsl, RunQueryDsl};
@@ -10,6 +10,7 @@ use diesel::{QueryDsl, RunQueryDsl};
 #[taurpc::procedures(path = "dashboard")]
 pub trait DashboardService {
     async fn get_producer_data() -> Result<Vec<CollectionByProducer>, IpcError>;
+    async fn get_collector_data() -> Result<Vec<CollectionByCollector>, IpcError>;
 }
 
 #[derive(Clone)]
@@ -26,7 +27,23 @@ impl DashboardService for DashboardServiceImpl {
             .inner_join(collections::table)
             .group_by((producers::id, producers::name))
             .select((producers::id, producers::name, sum(collections::quantity)))
+            .limit(5)
             .load::<CollectionByProducer>(connection)?;
+
+        Ok(result)
+    }
+
+    async fn get_collector_data(self) -> Result<Vec<CollectionByCollector>, IpcError> {
+        // Implementation goes here
+        println!("Searching producer data...");
+        let connection = &mut establish_connection();
+
+        let result: Vec<CollectionByCollector> = collectors::table
+            .inner_join(collections::table)
+            .group_by((collectors::id, collectors::name))
+            .select((collectors::id, collectors::name, sum(collections::quantity)))
+            .limit(5)
+            .load::<CollectionByCollector>(connection)?;
 
         Ok(result)
     }
