@@ -1,5 +1,6 @@
 pub mod collections;
 pub mod collectors;
+pub mod dashboard;
 pub mod db;
 pub mod errors;
 pub mod producers;
@@ -10,6 +11,7 @@ use taurpc::Router;
 
 use crate::collections::{CollectionService, CollectionServiceImpl};
 use crate::collectors::{CollectorService, CollectorServiceImpl};
+use crate::dashboard::{DashboardService, DashboardServiceImpl};
 use crate::producers::{ProducerService, ProducerServiceImpl};
 use crate::tanks::{TankService, TankServiceImpl};
 
@@ -25,7 +27,8 @@ pub fn run() {
         .merge(TankServiceImpl.into_handler())
         .merge(ProducerServiceImpl.into_handler())
         .merge(CollectorServiceImpl.into_handler())
-        .merge(CollectionServiceImpl.into_handler());
+        .merge(CollectionServiceImpl.into_handler())
+        .merge(DashboardServiceImpl.into_handler());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
