@@ -8,6 +8,8 @@ export type Collection = { id: number; producer_id: number; collector_id: number
 
 export type CollectionByCollector = { id: number; name: string; total: string | null }
 
+export type CollectionByDateRange = { date: string; total: string | null }
+
 export type CollectionByProducer = { id: number; name: string; total: string | null }
 
 export type Collector = { id: number; name: string }
@@ -26,7 +28,7 @@ export type Producer = { id: number; name: string; day_shift: boolean; night_shi
 
 export type Tank = { id: number; name: string; capacity: string }
 
-const ARGS_MAP = { 'collections':'{"create_collection":["new_collection"],"delete_collection":["collection_id"],"get_collection":["collection_id"],"list_collections":[],"update_collection":["collection_id","collection"]}', 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'dashboard':'{"get_collector_data":[],"get_producer_data":[]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
+const ARGS_MAP = { 'collections':'{"create_collection":["new_collection"],"delete_collection":["collection_id"],"get_collection":["collection_id"],"list_collections":[],"update_collection":["collection_id","collection"]}', 'collectors':'{"create_collector":["collector"],"delete_collector":["collector_id"],"get_collector":["collector_id"],"list_collectors":[],"update_collector":["collector_id","collector"]}', 'dashboard':'{"get_collection_by_date_range":["start_date","end_date"],"get_collector_data":[],"get_producer_data":[]}', 'producers':'{"create_producer":["producer"],"delete_producer":["producer_id"],"get_producer":["producer_id"],"list_producers":[],"update_producer":["producer_id","producer"]}', 'tanks':'{"create_tank":["new_tank"],"delete_tank":["tank_id"],"get_tank":["tank_id"],"list_tanks":[],"update_tank":["tank_id","updated_tank"]}' }
 export type Router = { "collections": {create_collection: (newCollection: NewCollection) => Promise<Collection>, 
 delete_collection: (collectionId: number) => Promise<null>, 
 get_collection: (collectionId: number) => Promise<Collection>, 
@@ -37,7 +39,8 @@ delete_collector: (collectorId: number) => Promise<null>,
 get_collector: (collectorId: number) => Promise<Collector>, 
 list_collectors: () => Promise<Collector[]>, 
 update_collector: (collectorId: number, collector: NewCollector) => Promise<Collector>},
-"dashboard": {get_collector_data: () => Promise<CollectionByCollector[]>, 
+"dashboard": {get_collection_by_date_range: (startDate: string, endDate: string) => Promise<CollectionByDateRange[]>, 
+get_collector_data: () => Promise<CollectionByCollector[]>, 
 get_producer_data: () => Promise<CollectionByProducer[]>},
 "producers": {create_producer: (producer: NewProducer) => Promise<Producer>, 
 delete_producer: (producerId: number) => Promise<null>, 

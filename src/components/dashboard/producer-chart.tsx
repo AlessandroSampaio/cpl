@@ -13,11 +13,11 @@ type ProducerChartProps = {
 
 export const ProducerChart = (props: ProducerChartProps) => {
   return (
-    <Card class="w-125">
+    <Card class="w-125 h-84">
       <CardHeader>
         <CardTitle>Volume por Produtor</CardTitle>
       </CardHeader>
-      <CardContent class="h-64 w-125 ">
+      <CardContent class="h-72">
         <BarChart data={props.data} width={500} />
       </CardContent>
     </Card>

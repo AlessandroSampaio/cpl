@@ -13,11 +13,11 @@ type CollectorChartProps = {
 
 export const CollectorChart = (props: CollectorChartProps) => {
   return (
-    <Card class="w-125">
+    <Card class="w-125 h-84">
       <CardHeader>
         <CardTitle>Volume por Coletor</CardTitle>
       </CardHeader>
-      <CardContent class="h-64 w-125 ">
+      <CardContent class="h-72 ">
         <BarChart data={props.data} />
       </CardContent>
     </Card>
