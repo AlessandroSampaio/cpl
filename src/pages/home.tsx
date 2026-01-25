@@ -1,7 +1,9 @@
-import { createSignal, onMount } from "solid-js";
+import { DateValue, parseDate } from "@ark-ui/solid";
+import { createEffect, createSignal, onMount } from "solid-js";
 import { CollectionChart } from "~/components/dashboard/collection-chart";
 import { CollectorChart } from "~/components/dashboard/collector-chart";
 import { ProducerChart } from "~/components/dashboard/producer-chart";
+import { DateRangePicker } from "~/components/ui/date-range-picker";
 import { Separator } from "~/components/ui/separator";
 import { formatDate } from "~/lib/formatters";
 import {
@@ -23,24 +25,51 @@ export const Home = () => {
     [],
   );
 
-  onMount(() => {
-    rpc.dashboard.get_producer_data().then(setProducerData);
-    rpc.dashboard.get_collector_data().then(setCollectorData);
+  const [rangeDate, setRangeDate] = createSignal<DateValue[] | undefined>([
+    parseDate(new Date()),
+    parseDate(new Date()),
+  ]);
+
+  const fetchTankMovByDateRange = (startDate: Date, endDate: Date) =>
     rpc.dashboard
-      .get_collection_by_date_range(
-        formatDate(new Date("2026-01-01")),
-        formatDate(new Date()),
-      )
-      .then((c) => {
-        console.log(c);
-        setDateRangeData(c);
-      });
+      .get_collection_by_date_range(formatDate(startDate), formatDate(endDate))
+      .then(setDateRangeData);
+  const fetchCollectorData = (startDate: Date, endDate: Date) =>
+    rpc.dashboard
+      .get_collector_data(formatDate(startDate), formatDate(endDate))
+      .then(setCollectorData);
+  const fetchProducerData = (startDate: Date, endDate: Date) =>
+    rpc.dashboard
+      .get_collector_data(formatDate(startDate), formatDate(endDate))
+      .then(setProducerData);
+
+  createEffect(() => {
+    if (rangeDate() && rangeDate()?.length == 2) {
+      const startDate = rangeDate()![0].toDate("-03:00");
+      const endDate = rangeDate()![1].toDate("-03:00");
+      fetchProducerData(startDate, endDate);
+      fetchCollectorData(startDate, endDate);
+      fetchTankMovByDateRange(startDate, endDate);
+    }
+  }, [rangeDate()]);
+
+  onMount(() => {
+    const date = new Date();
+    fetchProducerData(date, date);
+    fetchCollectorData(date, date);
+    fetchTankMovByDateRange(date, date);
   });
 
   return (
     <div class="space-y-4">
       <h1 class="text-2xl text-center">Controle de Produção</h1>
       <Separator />
+      <div class="flex gap-8">
+        <DateRangePicker
+          value={rangeDate()}
+          onValueChange={(dt) => setRangeDate(dt.value)}
+        />
+      </div>
       <div class="space-y-4">
         <div class="flex justify-evenly flex-wrap space-y-4">
           <ProducerChart

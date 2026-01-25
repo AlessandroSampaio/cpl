@@ -8,11 +8,11 @@ type CollectionChartProps = {
 
 export const CollectionChart = (props: CollectionChartProps) => {
   return (
-    <Card>
+    <Card class=" min-w-125 max-w-full">
       <CardHeader>
         <CardTitle>Volume coletado por dia em (L)</CardTitle>
       </CardHeader>
-      <CardContent class="h-64 max-w-full">
+      <CardContent class="h-64 min-w-125 max-w-full">
         <LineChart
           data={{
             labels: props.data.map((c) => c.date),

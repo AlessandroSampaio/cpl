@@ -5,16 +5,22 @@ use crate::{
     schema::{collections, collectors, producers},
 };
 use chrono::NaiveDate;
-use diesel::debug_query;
 use diesel::dsl::sum;
 use diesel::sql_query;
 use diesel::sql_types::Date;
+use diesel::{debug_query, ExpressionMethods};
 use diesel::{QueryDsl, RunQueryDsl};
 
 #[taurpc::procedures(path = "dashboard")]
 pub trait DashboardService {
-    async fn get_producer_data() -> Result<Vec<CollectionByProducer>, IpcError>;
-    async fn get_collector_data() -> Result<Vec<CollectionByCollector>, IpcError>;
+    async fn get_producer_data(
+        start_date: NaiveDate,
+        end_date: NaiveDate,
+    ) -> Result<Vec<CollectionByProducer>, IpcError>;
+    async fn get_collector_data(
+        start_date: NaiveDate,
+        end_date: NaiveDate,
+    ) -> Result<Vec<CollectionByCollector>, IpcError>;
     async fn get_collection_by_date_range(
         start_date: NaiveDate,
         end_date: NaiveDate,
@@ -26,13 +32,18 @@ pub struct DashboardServiceImpl;
 
 #[taurpc::resolvers]
 impl DashboardService for DashboardServiceImpl {
-    async fn get_producer_data(self) -> Result<Vec<CollectionByProducer>, IpcError> {
+    async fn get_producer_data(
+        self,
+        start_date: NaiveDate,
+        end_date: NaiveDate,
+    ) -> Result<Vec<CollectionByProducer>, IpcError> {
         // Implementation goes here
         println!("Searching producer data...");
         let connection = &mut establish_connection();
 
         let result: Vec<CollectionByProducer> = producers::table
             .inner_join(collections::table)
+            .filter(collections::date.between(start_date, end_date))
             .group_by((producers::id, producers::name))
             .select((producers::id, producers::name, sum(collections::quantity)))
             .limit(5)
@@ -41,13 +52,18 @@ impl DashboardService for DashboardServiceImpl {
         Ok(result)
     }
 
-    async fn get_collector_data(self) -> Result<Vec<CollectionByCollector>, IpcError> {
+    async fn get_collector_data(
+        self,
+        start_date: NaiveDate,
+        end_date: NaiveDate,
+    ) -> Result<Vec<CollectionByCollector>, IpcError> {
         // Implementation goes here
         println!("Searching producer data...");
         let connection = &mut establish_connection();
 
         let result: Vec<CollectionByCollector> = collectors::table
             .inner_join(collections::table)
+            .filter(collections::date.between(start_date, end_date))
             .group_by((collectors::id, collectors::name))
             .select((collectors::id, collectors::name, sum(collections::quantity)))
             .limit(5)
