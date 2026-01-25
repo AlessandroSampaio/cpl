@@ -1,12 +1,14 @@
-use crate::dashboard::model::{CollectionByCollector, CollectionByDateRange, CollectionByProducer};
+use crate::dashboard::model::{CollectionByCollector, CollectionByProducer, TankMovByDateRange};
 use crate::{
     db::establish_connection,
     errors::IpcError,
     schema::{collections, collectors, producers},
 };
 use chrono::NaiveDate;
+use diesel::debug_query;
 use diesel::dsl::sum;
-use diesel::ExpressionMethods;
+use diesel::sql_query;
+use diesel::sql_types::Date;
 use diesel::{QueryDsl, RunQueryDsl};
 
 #[taurpc::procedures(path = "dashboard")]
@@ -16,7 +18,7 @@ pub trait DashboardService {
     async fn get_collection_by_date_range(
         start_date: NaiveDate,
         end_date: NaiveDate,
-    ) -> Result<Vec<CollectionByDateRange>, IpcError>;
+    ) -> Result<Vec<TankMovByDateRange>, IpcError>;
 }
 
 #[derive(Clone)]
@@ -58,16 +60,26 @@ impl DashboardService for DashboardServiceImpl {
         self,
         start_date: NaiveDate,
         end_date: NaiveDate,
-    ) -> Result<Vec<CollectionByDateRange>, IpcError> {
+    ) -> Result<Vec<TankMovByDateRange>, IpcError> {
         // Implementation goes here
-        println!("Searching collection data...");
+        println!(
+            "Searching collection data... for the range of {} to {}",
+            start_date, end_date
+        );
         let connection = &mut establish_connection();
 
-        let result: Vec<CollectionByDateRange> = collections::table
-            .filter(collections::date.between(start_date, end_date))
-            .group_by((collections::date,))
-            .select((collections::date, sum(collections::quantity)))
-            .load::<CollectionByDateRange>(connection)?;
+        let sql = "select coalesce(c.date, w.date) as date, coalesce(sum(c.quantity),0) as total_collections, coalesce(sum(w.quantity ),0) as total_withdrawals
+        from withdrawals w full outer join collections c on c.date = w.date where c.date between $1 and $2 or w.date between $1 and $2 group by c.date, w.date;";
+
+        let query = sql_query(sql)
+            .bind::<Date, _>(start_date)
+            .bind::<Date, _>(end_date);
+
+        // Get a more structured debug output
+        let debug_output = format!("{:?}", debug_query::<diesel::pg::Pg, _>(&query));
+        println!("Debug Output: {}", debug_output);
+
+        let result: Vec<TankMovByDateRange> = query.load::<TankMovByDateRange>(connection)?;
 
         Ok(result)
     }

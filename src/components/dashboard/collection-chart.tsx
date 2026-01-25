@@ -1,9 +1,9 @@
-import { CollectionByDateRange } from "~/types/rpc";
+import { TankMovByDateRange } from "~/types/rpc";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { LineChart } from "../ui/charts";
 
 type CollectionChartProps = {
-  data: CollectionByDateRange[];
+  data: TankMovByDateRange[];
 };
 
 export const CollectionChart = (props: CollectionChartProps) => {
@@ -19,7 +19,11 @@ export const CollectionChart = (props: CollectionChartProps) => {
             datasets: [
               {
                 label: "Volume coletado (L)",
-                data: props.data.map((item) => Number(item.total)),
+                data: props.data.map((item) => Number(item.total_collections)),
+              },
+              {
+                label: "Volume retirado (L)",
+                data: props.data.map((item) => Number(item.total_withdrawals)),
               },
             ],
           }}

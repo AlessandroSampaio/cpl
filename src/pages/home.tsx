@@ -6,9 +6,9 @@ import { Separator } from "~/components/ui/separator";
 import { formatDate } from "~/lib/formatters";
 import {
   CollectionByCollector,
-  CollectionByDateRange,
   CollectionByProducer,
   createTauRPCProxy,
+  TankMovByDateRange,
 } from "~/types/rpc";
 
 export const Home = () => {
@@ -19,9 +19,9 @@ export const Home = () => {
   const [collectorData, setCollectorData] = createSignal<
     CollectionByCollector[]
   >([]);
-  const [dateRangeData, setDateRangeData] = createSignal<
-    CollectionByDateRange[]
-  >([]);
+  const [dateRangeData, setDateRangeData] = createSignal<TankMovByDateRange[]>(
+    [],
+  );
 
   onMount(() => {
     rpc.dashboard.get_producer_data().then(setProducerData);
@@ -31,7 +31,10 @@ export const Home = () => {
         formatDate(new Date("2026-01-01")),
         formatDate(new Date()),
       )
-      .then(setDateRangeData);
+      .then((c) => {
+        console.log(c);
+        setDateRangeData(c);
+      });
   });
 
   return (

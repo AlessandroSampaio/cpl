@@ -25,10 +25,15 @@ pub struct CollectionByCollector {
 }
 
 #[taurpc::ipc_type]
-#[derive(Debug, Queryable, Selectable, PartialEq)]
+#[derive(Debug, QueryableByName, PartialEq)]
 #[diesel(table_name = collections)]
-pub struct CollectionByDateRange {
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct TankMovByDateRange {
     pub date: chrono::NaiveDate,
-    #[diesel(select_expression = sum(collections::quantity))]
-    pub total: Option<BigDecimal>,
+    // #[diesel(select_expression = sum(collections::quantity))]
+    #[diesel(sql_type = diesel::sql_types::Decimal)]
+    pub total_collections: BigDecimal,
+    // #[diesel(select_expression = sum(withdrawals::quantity))]
+    #[diesel(sql_type = diesel::sql_types::Decimal)]
+    pub total_withdrawals: BigDecimal,
 }
