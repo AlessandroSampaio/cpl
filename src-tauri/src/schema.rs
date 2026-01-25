@@ -41,7 +41,6 @@ diesel::table! {
         tank_id -> Int4,
         quantity -> Numeric,
         date -> Date,
-        time -> Timestamp,
     }
 }
 

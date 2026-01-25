@@ -19,7 +19,6 @@ CREATE TABLE "withdrawals"(
 	"tank_id" INT4 NOT NULL,
 	"quantity" NUMERIC(10,3) NOT NULL,
 	"date" DATE NOT NULL,
-	"time" TIMESTAMP NOT NULL,
 	FOREIGN KEY ("tank_id") REFERENCES "tanks"("id")
 );
 
