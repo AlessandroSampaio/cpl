@@ -36,7 +36,10 @@ impl ProducerService for ProducerServiceImpl {
     async fn list_producers(self) -> Result<Vec<Producer>, IpcError> {
         let connection = &mut establish_connection();
 
-        let list_producers = producers.select(Producer::as_select()).load(connection)?;
+        let list_producers = producers
+            .select(Producer::as_select())
+            .order(id.asc())
+            .load(connection)?;
 
         Ok(list_producers)
     }

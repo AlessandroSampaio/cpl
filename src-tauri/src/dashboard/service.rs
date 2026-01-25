@@ -5,11 +5,7 @@ use crate::{
     schema::{collections, collectors, producers},
 };
 use chrono::NaiveDate;
-use diesel::dsl::sum;
-use diesel::sql_query;
-use diesel::sql_types::Date;
-use diesel::{debug_query, ExpressionMethods};
-use diesel::{QueryDsl, RunQueryDsl};
+use diesel::{dsl::sum, sql_query, sql_types::Date, ExpressionMethods, QueryDsl, RunQueryDsl};
 
 #[taurpc::procedures(path = "dashboard")]
 pub trait DashboardService {
@@ -89,8 +85,8 @@ impl DashboardService for DashboardServiceImpl {
             .bind::<Date, _>(end_date);
 
         // Get a more structured debug output
-        let debug_output = format!("{:?}", debug_query::<diesel::pg::Pg, _>(&query));
-        println!("Debug Output: {}", debug_output);
+        // let debug_output = format!("{:?}", debug_query::<diesel::pg::Pg, _>(&query));
+        // println!("Debug Output: {}", debug_output);
 
         let result: Vec<TankMovByDateRange> = query.load::<TankMovByDateRange>(connection)?;
 

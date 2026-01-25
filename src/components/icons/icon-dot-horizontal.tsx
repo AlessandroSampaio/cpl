@@ -6,10 +6,10 @@ export const IconDotsHorizontal: Component<JSX.IntrinsicElements["svg"]> = (
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
+      width="32"
+      height="32"
       fill="currentColor"
-      viewBox="0 0 24 24"
+      viewBox="0 0 32 32"
       class={props.class}
     >
       <title>Options</title>

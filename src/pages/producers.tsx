@@ -1,18 +1,11 @@
 import { ColumnDef } from "@tanstack/solid-table";
 import { createSignal, onMount, Show } from "solid-js";
-import { IconDotsHorizontal } from "~/components/icons/icon-dot-horizontal";
+import { IconPencil } from "~/components/icons/icon-edit";
 import { IconMoon } from "~/components/icons/icon-moon";
 import { IconSun } from "~/components/icons/icon-sun";
 import { CreateProducerDialog } from "~/components/producer/create-producer-dialog";
 import { Button } from "~/components/ui/button";
 import { DataTable } from "~/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import { Separator } from "~/components/ui/separator";
 import { TextField, TextFieldInput } from "~/components/ui/text-field";
 import { showToast } from "~/components/ui/toast";
@@ -48,44 +41,28 @@ export const Producers = () => {
     },
     {
       id: "actions",
+      header: "Ações",
       enableHiding: false,
       cell: (props) => {
         return (
-          <DropdownMenu placement="bottom-end">
-            <DropdownMenuTrigger
-              as={Button<"button">}
-              variant="ghost"
-              class="size-8 p-0"
-            >
-              <span class="sr-only">Open menu</span>
-              <IconDotsHorizontal />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Ações</DropdownMenuLabel>
-              <DropdownMenuItem>Editar</DropdownMenuItem>
-              <DropdownMenuItem
-                class="data-highlighted:bg-destructive data-highlighted:text-destructive-foreground text-destructive"
-                onClick={() =>
-                  rpc.producers
-                    .delete_producer(props.row.original.id)
-                    .then(() => {
-                      showToast({
-                        title: "Produtor removido com sucesso",
-                        description: "O produtor foi removido com sucesso",
-                        variant: "destructive",
-                      });
-                    })
-                    .then(list_producers)
-                }
-              >
-                Apagar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            class="group"
+            onClick={() => {
+              console.log(props.row.original);
+              setProducer(props.row.original);
+              setOpenCreate(true);
+            }}
+          >
+            <IconPencil class="size-10 group-hover:text-primary text-primary-foreground" />
+          </Button>
         );
       },
     },
   ];
+
+  const [producer, setProducer] = createSignal<Producer | undefined>(undefined);
 
   const list_producers = () => {
     rpc.producers
@@ -116,7 +93,13 @@ export const Producers = () => {
           <CreateProducerDialog
             onSubmit={list_producers}
             open={openCreate()}
-            onOpenChange={setOpenCreate}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setProducer(undefined);
+              }
+              setOpenCreate(isOpen);
+            }}
+            defaultValue={producer()}
           />
         </div>
         <DataTable columns={columns} data={producers() ?? []} />
