@@ -29,16 +29,22 @@ export const CreateProducerDialog = (props: CreateProducerDialogProps) => {
     if (others.defaultValue?.id) {
       rpc.producers
         .update_producer(others.defaultValue.id, value)
-        .then(() => props.onSubmit(true))
-        .then(() => props.onOpenChange(false))
+        .then((result) =>
+          showToast({
+            title: "Sucesso",
+            description: `Produtor ${result.id} atualizado com sucesso!`,
+          }),
+        )
+        .then(() => local.onSubmit(true))
+        .then(() => local.onOpenChange(false))
         .catch((error) => {
           showToast({
-            title: "Falha ao registrar o produtor",
+            title: "Falha ao atualizar o produtor",
             description: error,
             variant: "destructive",
           });
-          props.onSubmit(false);
-          props.onOpenChange(false);
+          local.onSubmit(false);
+          local.onOpenChange(false);
         });
     } else {
       rpc.producers
@@ -49,16 +55,16 @@ export const CreateProducerDialog = (props: CreateProducerDialogProps) => {
             description: `Produtor ${result.id} registrado com sucesso!`,
           }),
         )
-        .then(() => props.onSubmit(true))
-        .then(() => props.onOpenChange(false))
+        .then(() => local.onSubmit(true))
+        .then(() => local.onOpenChange(false))
         .catch((error) => {
           showToast({
             title: "Falha ao registrar o produtor",
             description: error,
             variant: "destructive",
           });
-          props.onSubmit(false);
-          props.onOpenChange(false);
+          local.onSubmit(false);
+          local.onOpenChange(false);
         });
     }
   };

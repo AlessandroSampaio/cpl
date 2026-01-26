@@ -10,7 +10,7 @@ type CollectorFormProps = {
 };
 
 export const CollectorForm = (props: CollectorFormProps) => {
-  const [cpForm, { Form, Field }] = createForm<NewCollector>({
+  const [_cpForm, { Form, Field }] = createForm<NewCollector>({
     initialValues: props.defaultValue,
   });
 

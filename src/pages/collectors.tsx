@@ -1,16 +1,10 @@
+import { createScheduled, debounce } from "@solid-primitives/scheduled";
 import { ColumnDef } from "@tanstack/solid-table";
-import { createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, onMount } from "solid-js";
 import { CreateCollectorDialog } from "~/components/collector/create-collector-dialog";
-import { IconDotsHorizontal } from "~/components/icons/icon-dot-horizontal";
+import { IconPencil } from "~/components/icons/icon-edit";
 import { Button } from "~/components/ui/button";
 import { DataTable } from "~/components/ui/data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import { Separator } from "~/components/ui/separator";
 import { TextField, TextFieldInput } from "~/components/ui/text-field";
 import { showToast } from "~/components/ui/toast";
@@ -18,7 +12,12 @@ import { Collector, createTauRPCProxy } from "~/types/rpc";
 
 export const Collectors = () => {
   const rpc = createTauRPCProxy();
-  // const [filter, setFilter] = createSignal<string>("");
+  const [filter, setFilter] = createSignal<string>("");
+  const schedule = createScheduled((fn) => debounce(fn, 500));
+
+  const [collector, setCollector] = createSignal<Collector | undefined>(
+    undefined,
+  );
   const [collectors, setCollectors] = createSignal<Collector[]>([]);
   const [openCreate, setOpenCreate] = createSignal(false);
   const columns: ColumnDef<Collector>[] = [
@@ -32,48 +31,30 @@ export const Collectors = () => {
     },
     {
       id: "actions",
+      header: "Ações",
       enableHiding: false,
       cell: (props) => {
         return (
-          <DropdownMenu placement="bottom-end">
-            <DropdownMenuTrigger
-              as={Button<"button">}
-              variant="ghost"
-              class="size-8 p-0"
-            >
-              <span class="sr-only">Open menu</span>
-              <IconDotsHorizontal />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Ações</DropdownMenuLabel>
-              <DropdownMenuItem>Editar</DropdownMenuItem>
-              <DropdownMenuItem
-                class="data-highlighted:bg-destructive data-highlighted:text-destructive-foreground text-destructive"
-                onClick={() =>
-                  rpc.collectors
-                    .delete_collector(props.row.original.id)
-                    .then(() => {
-                      showToast({
-                        title: "Coletor removido com sucesso",
-                        description: "O coletor foi removido com sucesso",
-                        variant: "destructive",
-                      });
-                    })
-                    .then(listCollectors)
-                }
-              >
-                Apagar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            class="group"
+            onClick={() => {
+              console.log(props.row.original);
+              setCollector(props.row.original);
+              setOpenCreate(true);
+            }}
+          >
+            <IconPencil class="size-10 group-hover:text-primary text-primary-foreground" />
+          </Button>
         );
       },
     },
   ];
 
-  const listCollectors = () => {
+  const listCollectors = (filter: string) => {
     rpc.collectors
-      .list_collectors()
+      .list_collectors(filter)
       .then(setCollectors)
       .catch((error) =>
         showToast({
@@ -84,7 +65,11 @@ export const Collectors = () => {
       );
   };
 
-  onMount(() => listCollectors());
+  createEffect(() => {
+    if (schedule()) listCollectors(filter());
+  }, [schedule()]);
+
+  onMount(() => listCollectors(filter()));
 
   return (
     <div class="space-y-8 h-[90%] flex flex-col">
@@ -95,12 +80,20 @@ export const Collectors = () => {
       <div class="flex-1 flex flex-col gap-8">
         <div class="flex gap-4">
           <TextField class="flex-1">
-            <TextFieldInput placeholder="Pesquisar" />
+            <TextFieldInput
+              spellcheck={false}
+              placeholder="Pesquisar"
+              value={filter()}
+              onInput={(event) => {
+                setFilter(event.currentTarget.value.toUpperCase());
+              }}
+            />
           </TextField>
           <CreateCollectorDialog
-            onSubmit={listCollectors}
+            onSubmit={() => listCollectors(filter())}
             open={openCreate()}
             onOpenChange={setOpenCreate}
+            defaultValue={collector()}
           />
         </div>
         <DataTable columns={columns} data={collectors() ?? []} />

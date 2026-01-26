@@ -8,7 +8,7 @@ use diesel::{RunQueryDsl, SelectableHelper};
 #[taurpc::procedures(path = "collectors")]
 pub trait CollectorService {
     async fn create_collector(collector: NewCollector) -> Result<Collector, IpcError>;
-    async fn list_collectors() -> Result<Vec<Collector>, IpcError>;
+    async fn list_collectors(filter: String) -> Result<Vec<Collector>, IpcError>;
     async fn delete_collector(collector_id: i32) -> Result<(), IpcError>;
     async fn get_collector(collector_id: i32) -> Result<Collector, IpcError>;
     async fn update_collector(
@@ -35,10 +35,14 @@ impl CollectorService for CollectorServiceImpl {
         return Ok(created_collector);
     }
 
-    async fn list_collectors(self) -> Result<Vec<Collector>, IpcError> {
+    async fn list_collectors(self, filter: String) -> Result<Vec<Collector>, IpcError> {
         let connection = &mut establish_connection();
 
-        let list_collectors = collectors.select(Collector::as_select()).load(connection)?;
+        let list_collectors = collectors
+            .filter(name.like(format!("%{}%", filter)))
+            .select(Collector::as_select())
+            .order(id.asc())
+            .load(connection)?;
 
         Ok(list_collectors)
     }
