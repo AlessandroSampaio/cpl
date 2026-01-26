@@ -40,7 +40,7 @@ export const Home = () => {
       .then(setCollectorData);
   const fetchProducerData = (startDate: Date, endDate: Date) =>
     rpc.dashboard
-      .get_collector_data(formatDate(startDate), formatDate(endDate))
+      .get_producer_data(formatDate(startDate), formatDate(endDate))
       .then(setProducerData);
 
   createEffect(() => {

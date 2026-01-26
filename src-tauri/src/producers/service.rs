@@ -8,7 +8,7 @@ use diesel::{RunQueryDsl, SelectableHelper};
 #[taurpc::procedures(path = "producers")]
 pub trait ProducerService {
     async fn create_producer(producer: NewProducer) -> Result<Producer, IpcError>;
-    async fn list_producers() -> Result<Vec<Producer>, IpcError>;
+    async fn list_producers(filter: String) -> Result<Vec<Producer>, IpcError>;
     async fn delete_producer(producer_id: i32) -> Result<(), IpcError>;
     async fn get_producer(producer_id: i32) -> Result<Producer, IpcError>;
     async fn update_producer(producer_id: i32, producer: NewProducer)
@@ -33,10 +33,11 @@ impl ProducerService for ProducerServiceImpl {
         return Ok(created_producer);
     }
 
-    async fn list_producers(self) -> Result<Vec<Producer>, IpcError> {
+    async fn list_producers(self, filter: String) -> Result<Vec<Producer>, IpcError> {
         let connection = &mut establish_connection();
 
         let list_producers = producers
+            .filter(name.like(format!("%{}%", filter)))
             .select(Producer::as_select())
             .order(id.asc())
             .load(connection)?;
