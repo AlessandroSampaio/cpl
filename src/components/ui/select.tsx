@@ -1,6 +1,5 @@
-import { createEffect, createSignal, Show } from "solid-js";
-import { JSX, splitProps } from "solid-js";
 import { Select as Kobalte } from "@kobalte/core/select";
+import { createMemo, JSX, Show, splitProps } from "solid-js";
 import { cn } from "~/lib/utils";
 
 type Option<T = string | number> = {
@@ -29,26 +28,24 @@ export const Select = <T = string | number,>(props: SelectProps<T>) => {
   const [{ class: rootClass }, rootProps, selectProps] = splitProps(
     props,
     ["class"],
-    ["name", "placeholder", "options", "required", "onChange", "disabled"],
+    ["name", "placeholder", "options", "required", "disabled"],
     ["placeholder", "ref", "onInput", "onBlur"],
   );
 
-  const [getValue, setValue] = createSignal<Option<T>>();
-  createEffect(() => {
-    setValue(props.options.find((opt) => props.value === opt.value));
-    // props.onSelectedChange(getValue()?.value);
-  });
-
-  createEffect(() => {
-    props.onSelectedChange(getValue()?.value);
-  }, [getValue()]);
+  const selectedOption = createMemo(
+    () => {
+      const option = props.options.find((opt) => opt.value === props.value);
+      return option ? option : null;
+    },
+    undefined,
+    { equals: (a, b) => a?.value === b?.value },
+  );
 
   return (
-    <Kobalte
+    <Kobalte<Option<T>>
       {...rootProps}
-      multiple={false}
-      value={getValue()}
-      onChange={setValue}
+      value={selectedOption()}
+      onChange={(v) => props.onSelectedChange(v?.value)}
       optionValue="value"
       optionTextValue="label"
       validationState={props.error ? "invalid" : "valid"}
