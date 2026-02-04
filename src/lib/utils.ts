@@ -21,6 +21,10 @@ export function normalizeDate(date: DateValue | string | undefined): string {
   }).format(normalizedDate);
 }
 
+export function paseDateToISO8601(date: Date) {
+  return date.toISOString().slice(0, -14);
+}
+
 export function parseDateStringToISO8601(dateString: string): string {
   // Split the string into day, month, and year parts
   const parts = dateString.split("/");
