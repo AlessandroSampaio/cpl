@@ -38,3 +38,5 @@ CREATE TABLE "collections"(
 	FOREIGN KEY ("collector_id") REFERENCES "collectors"("id"),
 	FOREIGN KEY ("tank_id") REFERENCES "tanks"("id")
 );
+
+INSERT INTO "tanks" VALUES (1, 'Tank A', 10000);
