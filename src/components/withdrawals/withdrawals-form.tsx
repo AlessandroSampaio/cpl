@@ -1,6 +1,5 @@
-import { DateValue, parseDate } from "@ark-ui/solid";
+import { parseDate } from "@ark-ui/solid";
 import { createForm, setValue, SubmitHandler } from "@modular-forms/solid";
-import { createEffect, createSignal } from "solid-js";
 import { toDate, toNumber } from "~/lib/transforms";
 import { normalizeDate } from "~/lib/utils";
 import { NewWithdrawal, Withdrawal } from "~/types/rpc";
@@ -15,33 +14,27 @@ type WithdrawalsFormProps = {
 };
 
 export const WithdrawalsForm = (props: WithdrawalsFormProps) => {
-  const [date, setDate] = createSignal<DateValue | undefined>();
   const [withdrawalForm, { Form, Field }] = createForm<NewWithdrawal>({
     initialValues: {
-      date: parseDate(new Date()).toString(),
+      date: normalizeDate(parseDate(new Date()).toString()),
       tank_id: 1,
       ...props.defaultValue,
     },
   });
 
-  createEffect(
-    () => setValue(withdrawalForm, "date", normalizeDate(date())),
-    [date()],
-  );
-
   return (
     <Form class="space-y-4" onSubmit={props.handleSubmit}>
       <div class="flex gap-4 w-full flex-wrap">
         <Field name="date" type="string" transform={toDate({ on: "input" })}>
-          {(_, props) => (
+          {(field, props) => (
             <ModularDatePicker
               {...props}
               label="Data da coleta"
               placeholder="dd/MM/yyy"
-              value={date() ? [date()!] : undefined}
-              onValueChange={(value) => {
-                setDate(value.value[0]);
-              }}
+              value={field.value ? [field.value] : undefined}
+              onValueChange={(value) =>
+                setValue(withdrawalForm, "date", value.valueAsString[0])
+              }
             />
           )}
         </Field>
