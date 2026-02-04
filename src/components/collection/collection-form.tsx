@@ -1,4 +1,4 @@
-import { DateValue, parseDate } from "@ark-ui/solid";
+import { parseDate } from "@ark-ui/solid";
 import {
   createForm,
   focus,
@@ -6,9 +6,9 @@ import {
   setValue,
   SubmitHandler,
 } from "@modular-forms/solid";
-import { createEffect, createSignal, onMount } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { toDate, toNumber } from "~/lib/transforms";
-import { normalizeDate, parseDateStringToISO8601 } from "~/lib/utils";
+import { normalizeDate } from "~/lib/utils";
 import {
   Collection,
   Collector,
@@ -45,7 +45,7 @@ export const CollectionForm = (props: CollectionFormProps) => {
       initialValues: {
         date: normalizeDate(parseDate(new Date()).toString()),
         tank_id: 1,
-        quantity: 0,
+        quantity: "0",
         ...props.defaultValue,
       },
     });

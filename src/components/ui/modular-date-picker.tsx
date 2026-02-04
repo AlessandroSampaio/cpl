@@ -1,13 +1,6 @@
 import { DateValue, parseDate } from "@ark-ui/solid";
 import { ValueChangeDetails } from "@zag-js/date-picker";
-import {
-  Index,
-  JSX,
-  Show,
-  createEffect,
-  createMemo,
-  splitProps,
-} from "solid-js";
+import { Index, JSX, Show, createMemo, splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
 import {
   DatePicker,
