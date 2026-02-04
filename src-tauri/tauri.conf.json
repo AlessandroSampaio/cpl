@@ -12,9 +12,18 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "cpl",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "visible": false
+      },
+      {
+        "label": "splash",
+        "title": "CPL - Controle de Produção de Leite",
+        "width": 400,
+        "height": 600,
+        "url": "/splashscreen"
       }
     ],
     "security": {
