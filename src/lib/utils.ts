@@ -1,4 +1,4 @@
-import { DateValue } from "@ark-ui/solid";
+import { DateValue, parseDate } from "@ark-ui/solid";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -38,4 +38,23 @@ export function parseDateStringToISO8601(dateString: string): string {
   // Use toISOString() to convert the Date object to an ISO 8601 string (in UTC)
   // This produces a string like "2025-01-23T00:00:00.000Z"
   return dateObject.toISOString().slice(0, -14);
+}
+
+export function asDateValueArray(
+  value: DateValue[] | string[] | undefined,
+): DateValue[] | undefined {
+  if (isStringArray(value)) {
+    return value.map((v) => parseDate(parseDateStringToISO8601(v)));
+  }
+  return value;
+}
+
+function isStringArray(value: unknown): value is string[] {
+  // First, check if the value is an array at all using Array.isArray()
+  if (!Array.isArray(value)) {
+    return false;
+  }
+
+  // Then, use the .every() method to check if all elements are strings
+  return value.every((item) => typeof item === "string");
 }

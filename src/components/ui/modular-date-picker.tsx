@@ -1,6 +1,13 @@
 import { DateValue, parseDate } from "@ark-ui/solid";
 import { ValueChangeDetails } from "@zag-js/date-picker";
-import { Index, Show, JSX } from "solid-js";
+import {
+  Index,
+  JSX,
+  Show,
+  createMemo,
+  createSignal,
+  splitProps,
+} from "solid-js";
 import { Portal } from "solid-js/web";
 import {
   DatePicker,
@@ -24,12 +31,16 @@ import {
   DatePickerViewControl,
   DatePickerViewTrigger,
 } from "~/components/ui/date-picker";
-import { normalizeDate, parseDateStringToISO8601 } from "~/lib/utils";
+import {
+  asDateValueArray,
+  normalizeDate,
+  parseDateStringToISO8601,
+} from "~/lib/utils";
 import { Label } from "./label";
-import { splitProps } from "solid-js";
+import { createEffect } from "solid-js";
 
 type ModularDatePickerProps = {
-  value: DateValue[] | undefined;
+  value: DateValue[] | string[] | undefined;
   onValueChange: (value: ValueChangeDetails) => void;
   label?: string | undefined;
   placeholder?: string | undefined;
@@ -42,12 +53,24 @@ type ModularDatePickerProps = {
 };
 
 export const ModularDatePicker = (props: ModularDatePickerProps) => {
-  const [inputProps, rootProps] = splitProps(props, [
-    "onInput",
-    "onChange",
-    "onBlur",
-    "placeholder",
-  ]);
+  // createEffect(
+  //   () => setValue(_collectionForm, "date", normalizeDate(date())),
+  //   [date()],
+  // );
+
+  const [inputProps, { onValueChange }, rootProps] = splitProps(
+    props,
+    ["onInput", "onChange", "onBlur", "placeholder"],
+    ["value", "onValueChange"],
+  );
+
+  const date = createMemo(() => asDateValueArray(props.value), [props.value]);
+
+  createEffect(() => {
+    console.log(`Date() : ${date()}`);
+    // setDate(asDateValueArray(props.value));
+  });
+
   return (
     <div class="flex flex-col space-y-2">
       <Show when={props.label}>
@@ -63,6 +86,11 @@ export const ModularDatePicker = (props: ModularDatePickerProps) => {
           if (!value) return undefined;
           return parseDate(parseDateStringToISO8601(value));
         }}
+        onValueChange={(e) => {
+          // setDate(e.value);
+          onValueChange(e);
+        }}
+        value={asDateValueArray(date())}
       >
         <DatePickerControl>
           <DatePickerInput placeholder="Selecione uma data" {...inputProps} />
