@@ -43,8 +43,8 @@ export const CollectionForm = (props: CollectionFormProps) => {
 
   onMount(() => {
     // Fetch producers and collectors data here
-    rpc.producers.list_producers().then(setProducers);
-    rpc.collectors.list_collectors().then(setCollectors);
+    rpc.producers.list_producers("").then(setProducers);
+    rpc.collectors.list_collectors("").then(setCollectors);
   });
 
   return (
