@@ -10,7 +10,7 @@ export const Collections = () => {
 
   const handleSubmit: SubmitHandler<NewCollection> = (values) => {
     const date = dateFromString(values.date);
-    console.log(date);
+
     rpc.collections
       .create_collection({
         ...values,

@@ -1,8 +1,14 @@
 import { DateValue, parseDate } from "@ark-ui/solid";
-import { createForm, setValue, SubmitHandler } from "@modular-forms/solid";
+import {
+  createForm,
+  focus,
+  reset,
+  setValue,
+  SubmitHandler,
+} from "@modular-forms/solid";
 import { createEffect, createSignal, onMount } from "solid-js";
 import { toDate, toNumber } from "~/lib/transforms";
-import { normalizeDate } from "~/lib/utils";
+import { normalizeDate, parseDateStringToISO8601 } from "~/lib/utils";
 import {
   Collection,
   Collector,
@@ -26,7 +32,7 @@ export const CollectionForm = (props: CollectionFormProps) => {
 
   const [_collectionForm, { Form, Field }] = createForm<NewCollection>({
     initialValues: {
-      date: parseDate(new Date()).toString(),
+      date: normalizeDate(parseDate(new Date()).toString()),
       tank_id: 1,
       ...props.defaultValue,
     },
@@ -34,12 +40,17 @@ export const CollectionForm = (props: CollectionFormProps) => {
   const [producers, setProducers] = createSignal<Producer[]>([]);
   const [collectors, setCollectors] = createSignal<Collector[]>([]);
 
-  const [date, setDate] = createSignal<DateValue | undefined>();
-
-  createEffect(
-    () => setValue(_collectionForm, "date", normalizeDate(date())),
-    [date()],
-  );
+  const resetForm = () => {
+    reset(_collectionForm, {
+      initialValues: {
+        date: normalizeDate(parseDate(new Date()).toString()),
+        tank_id: 1,
+        quantity: 0,
+        ...props.defaultValue,
+      },
+    });
+    focus(_collectionForm, "producer_id");
+  };
 
   onMount(() => {
     // Fetch producers and collectors data here
@@ -48,7 +59,13 @@ export const CollectionForm = (props: CollectionFormProps) => {
   });
 
   return (
-    <Form class="space-y-4" onSubmit={props.handleSubmit}>
+    <Form
+      class="space-y-4"
+      onSubmit={(e, v) => {
+        props.handleSubmit(e, v);
+        resetForm();
+      }}
+    >
       <div class="flex gap-4 w-full flex-wrap">
         <Field name="producer_id" type="number">
           {(field, props) => {
@@ -64,7 +81,11 @@ export const CollectionForm = (props: CollectionFormProps) => {
                 name="producer_id"
                 value={field.value}
                 onSelectedChange={(value) => {
-                  value && setValue(_collectionForm, "producer_id", value!);
+                  value
+                    ? setValue(_collectionForm, "producer_id", value!)
+                    : reset(_collectionForm, "producer_id", {
+                        initialValue: undefined,
+                      });
                 }}
                 error={field.error}
                 required
@@ -97,15 +118,15 @@ export const CollectionForm = (props: CollectionFormProps) => {
           }}
         </Field>
         <Field name="date" type="string" transform={toDate({ on: "input" })}>
-          {(_, props) => (
+          {(field, props) => (
             <ModularDatePicker
               {...props}
               label="Data da coleta"
               placeholder="dd/MM/yyy"
-              value={date() ? [date()!] : undefined}
-              onValueChange={(value) => {
-                setDate(value.value[0]);
-              }}
+              value={field.value ? [field.value] : undefined}
+              onValueChange={(value) =>
+                setValue(_collectionForm, "date", value.valueAsString[0])
+              }
             />
           )}
         </Field>
@@ -151,7 +172,10 @@ export const CollectionForm = (props: CollectionFormProps) => {
           type="button"
           variant={"ghost"}
           class="hover:bg-destructive hover:text-destructive-foreground"
-          onClick={() => props.handleCancel()}
+          onClick={() => {
+            resetForm();
+            props.handleCancel();
+          }}
         >
           Cancelar
         </Button>

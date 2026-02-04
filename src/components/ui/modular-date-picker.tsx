@@ -4,8 +4,8 @@ import {
   Index,
   JSX,
   Show,
+  createEffect,
   createMemo,
-  createSignal,
   splitProps,
 } from "solid-js";
 import { Portal } from "solid-js/web";
@@ -37,7 +37,6 @@ import {
   parseDateStringToISO8601,
 } from "~/lib/utils";
 import { Label } from "./label";
-import { createEffect } from "solid-js";
 
 type ModularDatePickerProps = {
   value: DateValue[] | string[] | undefined;
@@ -65,11 +64,6 @@ export const ModularDatePicker = (props: ModularDatePickerProps) => {
   );
 
   const date = createMemo(() => asDateValueArray(props.value), [props.value]);
-
-  createEffect(() => {
-    console.log(`Date() : ${date()}`);
-    // setDate(asDateValueArray(props.value));
-  });
 
   return (
     <div class="flex flex-col space-y-2">
