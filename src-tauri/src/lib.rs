@@ -1,19 +1,22 @@
-pub mod collections;
-pub mod collectors;
-pub mod dashboard;
-pub mod db;
-pub mod errors;
-pub mod producers;
-pub mod schema;
-pub mod tanks;
-pub mod withdrawals;
+mod collections;
+mod collectors;
+mod dashboard;
+mod db;
+mod errors;
+mod producers;
+mod schema;
+mod setup;
+mod tanks;
+mod withdrawals;
 
+use tauri::Manager;
 use taurpc::Router;
 
 use crate::collections::{CollectionService, CollectionServiceImpl};
 use crate::collectors::{CollectorService, CollectorServiceImpl};
 use crate::dashboard::{DashboardService, DashboardServiceImpl};
 use crate::producers::{ProducerService, ProducerServiceImpl};
+use crate::setup::{SetupProgressListener, SetupProgressListenerImpl};
 use crate::tanks::{TankService, TankServiceImpl};
 use crate::withdrawals::{WithdrawalsService, WithdrawalsServiceImpl};
 
@@ -31,12 +34,19 @@ pub fn run() {
         .merge(CollectorServiceImpl.into_handler())
         .merge(CollectionServiceImpl.into_handler())
         .merge(DashboardServiceImpl.into_handler())
-        .merge(WithdrawalsServiceImpl.into_handler());
+        .merge(WithdrawalsServiceImpl.into_handler())
+        .merge(SetupProgressListenerImpl.into_handler());
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![greet])
         .invoke_handler(ipc_handler.into_handler())
+        .setup(|app| {
+            let splash_window = app.get_webview_window("splash").unwrap();
+            splash_window.show().unwrap();
+
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

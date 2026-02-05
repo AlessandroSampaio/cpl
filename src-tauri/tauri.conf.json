@@ -16,13 +16,18 @@
         "title": "cpl",
         "width": 800,
         "height": 600,
-        "visible": false
+        "visible": false,
+        "maximized": true,
+        "url": "/home"
       },
       {
         "label": "splash",
         "title": "CPL - Controle de Produção de Leite",
-        "width": 400,
-        "height": 600,
+        "width": 300,
+        "height": 400,
+        "resizable": false,
+        "center": true,
+        "visible": false,
         "url": "/splashscreen"
       }
     ],
