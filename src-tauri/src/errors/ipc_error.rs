@@ -12,6 +12,8 @@ pub enum IpcError {
     ),
     #[error("Invalid value for {0} : {1}")]
     InvalidValue(String, String),
+    #[error("Error while running migrations: {0}")]
+    MigrationError(String),
 }
 
 impl Serialize for IpcError {
