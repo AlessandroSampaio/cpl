@@ -1,9 +1,11 @@
+
 [package]
 name = "cpl"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Uma aplicação para o controle do armazenamento e distribuição de leite de uma cooperativa"
+authors = ["AlessandroSampaio"]
 edition = "2021"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

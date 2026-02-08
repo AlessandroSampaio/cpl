@@ -5,7 +5,7 @@ import { WithdrawalsForm } from "~/components/withdrawals/withdrawals-form";
 import { dateFromString, formatDate } from "~/lib/formatters";
 import { createTauRPCProxy, NewWithdrawal } from "~/types/rpc";
 
-export const Withdrawals = () => {
+const Withdrawals = () => {
   const rpc = createTauRPCProxy();
 
   const handleSubmit: SubmitHandler<NewWithdrawal> = (values) => {
@@ -44,3 +44,5 @@ export const Withdrawals = () => {
     </div>
   );
 };
+
+export default Withdrawals;

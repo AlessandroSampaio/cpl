@@ -5,7 +5,7 @@ import { showToast } from "~/components/ui/toast";
 import { dateFromString, formatDate } from "~/lib/formatters";
 import { createTauRPCProxy, NewCollection } from "~/types/rpc";
 
-export const Collections = () => {
+const Collections = () => {
   const rpc = createTauRPCProxy();
 
   const handleSubmit: SubmitHandler<NewCollection> = (values) => {
@@ -43,3 +43,5 @@ export const Collections = () => {
     </div>
   );
 };
+
+export default Collections;

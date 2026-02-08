@@ -10,7 +10,7 @@ import { TextField, TextFieldInput } from "~/components/ui/text-field";
 import { showToast } from "~/components/ui/toast";
 import { Collector, createTauRPCProxy } from "~/types/rpc";
 
-export const Collectors = () => {
+const Collectors = () => {
   const rpc = createTauRPCProxy();
   const [filter, setFilter] = createSignal<string>("");
   const schedule = createScheduled((fn) => debounce(fn, 500));
@@ -101,3 +101,5 @@ export const Collectors = () => {
     </div>
   );
 };
+
+export default Collectors;

@@ -1,12 +1,14 @@
+import { lazy } from "solid-js";
 import { Route, Router } from "@solidjs/router";
 import "~/App.css";
 import { Layout } from "~/components/layout";
-import { Home } from "~/pages/home";
-import { Producers } from "~/pages/producers";
-import { Collectors } from "~/pages/collectors";
-import { Collections } from "~/pages/collections";
-import { Withdrawals } from "./pages/withdrawals";
-import { SplashScreen } from "./pages/splash-screen";
+
+const Home = lazy(() => import("~/pages/home"));
+const Producers = lazy(() => import("~/pages/producers"));
+const Collectors = lazy(() => import("~/pages/collectors"));
+const Collections = lazy(() => import("~/pages/collections"));
+const Withdrawals = lazy(() => import("~/pages/withdrawals"));
+const SplashScreen = lazy(() => import("~/pages/splash-screen"));
 
 function App() {
   return (

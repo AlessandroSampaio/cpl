@@ -13,7 +13,7 @@ import {
   TankMovByDateRange,
 } from "~/types/rpc";
 
-export const Home = () => {
+const Home = () => {
   const rpc = createTauRPCProxy();
   const [producerData, setProducerData] = createSignal<CollectionByProducer[]>(
     [],
@@ -100,3 +100,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;

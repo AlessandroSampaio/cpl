@@ -3,7 +3,7 @@ import { createSignal, onMount } from "solid-js";
 import { Button } from "~/components/ui/button";
 import { createTauRPCProxy } from "~/types/rpc";
 
-export const SplashScreen = () => {
+const SplashScreen = () => {
   const rpc = createTauRPCProxy();
 
   const [msg, setMsg] = createSignal("");
@@ -25,3 +25,5 @@ export const SplashScreen = () => {
     </div>
   );
 };
+
+export default SplashScreen;

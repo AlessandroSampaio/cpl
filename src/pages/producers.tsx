@@ -12,7 +12,7 @@ import { showToast } from "~/components/ui/toast";
 import { createTauRPCProxy, Producer } from "~/types/rpc";
 import { createScheduled, debounce } from "@solid-primitives/scheduled";
 
-export const Producers = () => {
+const Producers = () => {
   const rpc = createTauRPCProxy();
   const [producers, setProducers] = createSignal<Producer[]>([]);
   const [openCreate, setOpenCreate] = createSignal(false);
@@ -120,3 +120,5 @@ export const Producers = () => {
     </div>
   );
 };
+
+export default Producers;
